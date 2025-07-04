@@ -1,1 +1,1 @@
-# ai_to_product
+# Implement Plate recognition with Triton Inference Server. More detail about Triton models is on Plate_OCR_schema.pdf
