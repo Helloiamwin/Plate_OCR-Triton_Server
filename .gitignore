@@ -159,13 +159,13 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-yolov5_clone
-*.onnx
-*.index
-database.json
-TensorRT
-PaddleOCR
-en_PP-OCRv3_det_infer
-en_PP-OCRv3_rec_infer
-*.engine
-*.plan
+# yolov5_clone
+# *.onnx
+# *.index
+# database.json
+# TensorRT
+# PaddleOCR
+# en_PP-OCRv3_det_infer
+# en_PP-OCRv3_rec_infer
+# *.engine
+# *.plan
