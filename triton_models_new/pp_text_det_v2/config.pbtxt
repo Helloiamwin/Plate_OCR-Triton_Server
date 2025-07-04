@@ -1,0 +1,71 @@
+name: "pp_text_det_v2"
+platform: "ensemble"
+max_batch_size: 50
+input [
+  {
+    name: "text_det_input"
+    data_type: TYPE_UINT8
+    dims: [3,-1,-1]
+  }
+  ,
+  {
+    name: "text_det_input_boxes"
+    data_type: TYPE_FP32
+    dims: [-1, 4]
+  }
+]
+output [
+  {
+    name: "text_det_output"
+    data_type: TYPE_FP32
+    dims: [-1,4,2]
+  }
+]
+
+ensemble_scheduling {
+  step [
+    {
+      model_name: "pp_pre_text_det_v2"
+      model_version: -1
+      input_map {
+        key: "pre_text_det_input_images"
+        value: "text_det_input"
+      }
+      input_map {
+        key: "pre_text_det_input_boxes"
+        value: "text_det_input_boxes"
+      }
+      output_map {
+        key: "pre_text_det_output_images"
+        value: "x"
+      }
+    },
+    
+    {
+      model_name: "pp_infer_text_det"
+      model_version: -1
+      input_map {
+        key: "x"
+        value: "x"
+      },
+      output_map {
+        key: "sigmoid_0.tmp_0"
+        value: "post_text_det_input_images"
+      }
+    },
+
+    {
+      model_name: "pp_post_text_det_v2"
+      model_version: -1
+      input_map {
+        key: "post_text_det_input_images"
+        value: "post_text_det_input_images"
+      }
+      output_map{
+        key: "post_text_det_output"
+        value: "text_det_output"
+      }
+    }
+
+  ]
+}

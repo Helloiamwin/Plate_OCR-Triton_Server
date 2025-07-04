@@ -1,0 +1,28 @@
+name: "pp_pre_text_det_v2"
+backend: "python"
+max_batch_size: 50
+input [
+  {
+    name: "pre_text_det_input_images"
+    data_type: TYPE_UINT8
+    dims: [3,-1,-1]
+  },
+  {
+    name: "pre_text_det_input_boxes"
+    data_type: TYPE_FP32
+    dims: [-1, 4]
+  }
+]
+output [
+  {
+    name: "pre_text_det_output_images"
+    data_type: TYPE_FP32
+    dims: [3,-1,-1]
+  }
+]
+instance_group [
+    {
+      count: 1
+      kind: KIND_CPU
+    }
+]

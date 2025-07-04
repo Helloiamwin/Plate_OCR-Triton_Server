@@ -1,0 +1,23 @@
+name: "python_backend_for_test"
+backend: "python"
+max_batch_size: 6
+input [
+  {
+    name: "images"
+    data_type: TYPE_UINT8
+    dims: [3,-1,-1]
+  }
+]
+output [
+  {
+    name: "output"
+    data_type: TYPE_FP32
+    dims: [3,-1,-1]
+  }
+]
+instance_group [
+    {
+      count: 1
+      kind: KIND_GPU
+    }
+]

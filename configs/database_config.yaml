@@ -1,0 +1,8 @@
+hostname: "localhost"
+port: 27017
+user: ai_to_product 
+password: ai_to_product
+database_name: face_db
+collection_name: person
+path: "./faces"
+end: ".jpg"

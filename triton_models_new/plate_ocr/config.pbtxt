@@ -1,0 +1,123 @@
+name: "plate_ocr"
+platform: "ensemble"
+max_batch_size: 6
+input [
+  {
+    name: "plate_ocr_image_input"
+    data_type: TYPE_UINT8
+    dims: [3,-1,-1]
+  },
+  {
+    name: "plate_ocr_input_shape_list"
+    data_type: TYPE_FP32
+    dims: [2]
+  }
+]
+
+output [
+  {
+    name: "vehicle_det_output"
+    data_type: TYPE_FP32
+    dims: [-1,4]
+  },
+  {
+    name: "pre_text_rec_output_order"
+    data_type: TYPE_UINT8
+    dims: [-1]
+  },
+  {
+    name: "plate_ocr_output_encoded_text"
+    data_type: TYPE_FP32
+    dims: [-1,50]
+  },
+  {
+    name: "plate_ocr_output_score"
+    data_type: TYPE_FP32
+    dims: [-1]
+  },
+  {
+    name: "text_det_output"
+    data_type: TYPE_FP32
+    dims: [-1,4,2]
+  }
+]
+
+ensemble_scheduling {
+  step [
+    {
+      model_name: "yolo_vehicle_det_v2"
+      model_version: -1
+      input_map {
+        key: "vehicle_det_input"
+        value: "plate_ocr_image_input"
+      }
+      input_map {
+        key: "vehicle_det_input_shape_list"
+        value: "plate_ocr_input_shape_list"
+      }
+      output_map {
+        key: "vehicle_det_output"
+        value: "vehicle_det_output"
+      }
+    },
+
+    {
+      model_name: "pp_text_det_v2"
+      model_version: -1
+      input_map {
+        key: "text_det_input"
+        value: "plate_ocr_image_input"
+      }
+      input_map {
+        key: "text_det_input_boxes"
+        value: "vehicle_det_output"
+      }
+      output_map {
+        key: "text_det_output"
+        value: "text_det_output"
+      }
+    },
+
+    {
+      model_name: "pp_pre_pre_text_rec"
+      model_version: -1
+      input_map {
+        key: "vehicle_det_input"
+        value: "plate_ocr_image_input"
+      }
+      input_map {
+        key: "vehicle_det_output"
+        value: "vehicle_det_output"
+      }
+      output_map {
+        key: "pre_text_rec_input_images"
+        value: "pre_text_rec_input_images_"
+      }
+    },
+
+    {
+      model_name: "pp_text_rec_v2"
+      model_version: -1
+      input_map {
+        key: "text_rec_input_images"
+        value: "pre_text_rec_input_images_"
+      }
+      input_map {
+        key: "text_rec_input_dt_boxes"
+        value: "text_det_output"
+      }
+      output_map {
+        key: "text_rec_output_encode"
+        value: "plate_ocr_output_encoded_text"
+      }
+      output_map {
+        key: "text_rec_output_score"
+        value: "plate_ocr_output_score"
+      }
+      output_map {
+        key: "text_rec_output_order"
+        value: "pre_text_rec_output_order"
+      }
+    }
+  ]
+}

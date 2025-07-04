@@ -1,0 +1,80 @@
+name: "yolo_vehicle_det"
+platform: "ensemble"
+max_batch_size: 6
+input [
+  {
+    name: "vehicle_det_input"
+    data_type: TYPE_UINT8
+    dims: [3,-1,-1]
+  },
+  {
+    name: "vehicle_det_input_shape_list"
+    data_type: TYPE_FP32
+    dims: [2]
+  }
+
+]
+output [
+  {
+    name: "vehicle_det_output"
+    data_type: TYPE_FP32
+    dims: [-1,4]
+  },
+  {
+    name: "vehicle_det_order_output"
+    data_type: TYPE_UINT8
+    dims: [1]
+  }
+]
+
+ensemble_scheduling {
+  step [
+   {
+      model_name: "yolo_pre_vehicle_det"
+      model_version: -1
+      input_map {
+        key: "pre_vehicle_det_input_images"
+        value: "vehicle_det_input"
+      }
+      output_map {
+        key: "pre_vehicle_det_output_images"
+        value: "x"
+      }
+    },
+
+    {
+      model_name: "yolo_infer_vehicle_det"
+      model_version: -1
+      input_map {
+        key:  "images"
+        value: "x"
+      }
+      output_map {
+        key: "output0"
+        value: "post_vehicle_det_input_images"
+      }
+    },
+
+    {
+      model_name: "yolo_post_vehicle_det"
+      model_version: -1
+      input_map {
+        key: "post_vehicle_det_input_images"
+        value: "post_vehicle_det_input_images"
+      }
+      input_map {
+        key: "post_vehicle_det_input_shape_list"
+        value: "vehicle_det_input_shape_list"
+      }
+      output_map {
+        key: "post_vehicle_det_output"
+        value: "vehicle_det_output"
+      }
+      output_map {
+        key: "post_vehicle_det_order_output"
+        value: "vehicle_det_order_output"
+      }
+    }
+
+  ]
+}

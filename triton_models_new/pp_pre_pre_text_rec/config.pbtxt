@@ -1,0 +1,30 @@
+name: "pp_pre_pre_text_rec"
+backend: "python"
+max_batch_size: 50
+input [
+  {
+    name: "vehicle_det_input"
+    data_type: TYPE_UINT8
+    dims: [3,-1,-1]
+  },
+  {
+    name: "vehicle_det_output"
+    data_type: TYPE_FP32
+    dims: [-1,4]
+  }
+]
+output [
+ {
+    name: "pre_text_rec_input_images"
+    data_type: TYPE_UINT8
+    dims: [3,-1,-1]
+  }
+]
+
+instance_group [
+    {
+      count: 1
+      kind: KIND_CPU
+    }
+]
+

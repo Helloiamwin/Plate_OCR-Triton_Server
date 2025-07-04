@@ -1,0 +1,29 @@
+name: "yolo_post_vehicle_det_v2"
+backend: "python"
+max_batch_size: 6
+input [
+  {
+    name: "post_vehicle_det_input_shape_list"
+    data_type: TYPE_FP32
+    dims: [2]
+  },
+  {
+    name: "post_vehicle_det_input_images"
+    data_type: TYPE_FP32
+    dims: [84,-1]
+  }
+]
+output [
+  {
+    name: "post_vehicle_det_output"
+    data_type: TYPE_FP32
+    dims: [-1, 4]
+  }
+]
+
+instance_group [
+    {
+      count: 1
+      kind: KIND_CPU
+    }
+]

@@ -1,0 +1,64 @@
+name: "ocr"
+platform: "ensemble"
+max_batch_size: 6
+input [
+  {
+    name: "ocr_input"
+    data_type: TYPE_UINT8
+    dims: [3,-1,-1]
+  }
+]
+output [
+  {
+    name: "ocr_output_encoded_text"
+    data_type: TYPE_FP32
+    dims: [-1,50]
+  },
+  {
+    name: "ocr_output_score"
+    data_type: TYPE_FP32
+    dims: [-1]
+  },
+  {
+    name: "ocr_output_dt_boxes"
+    data_type: TYPE_FP32
+    dims: [-1,4,2]
+  }
+]
+
+ensemble_scheduling {
+  step [
+    {
+      model_name: "pp_text_det"
+      model_version: -1
+      input_map {
+        key: "text_det_input"
+        value: "ocr_input"
+      }
+      output_map {
+        key: "text_det_output"
+        value: "ocr_output_dt_boxes"
+      }
+    },
+    {
+      model_name: "pp_text_rec"
+      model_version: -1
+      input_map {
+        key: "text_rec_input_images"
+        value: "ocr_input"
+      }
+      input_map {
+        key: "text_rec_input_dt_boxes"
+        value: "ocr_output_dt_boxes"
+      }
+      output_map {
+        key: "text_rec_output_encode"
+        value: "ocr_output_encoded_text"
+      }
+      output_map {
+        key: "text_rec_output_score"
+        value: "ocr_output_score"
+      }
+    }
+  ]
+}

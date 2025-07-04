@@ -1,0 +1,7 @@
+face_detection: 
+  engine_name: scrfd_trt
+  scrfd_onnx: configs/scrfd_config.yaml
+  scrfd_trt: configs/scrfd_trt_config.yaml
+face_encode: configs/arcface_config.yaml
+faiss: configs/faiss_config.yaml
+database: configs/database_config.yaml

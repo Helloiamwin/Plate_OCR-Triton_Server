@@ -1,0 +1,7 @@
+onnx: yolov5/yolov5s.onnx
+size: [640,640]
+batch_szie: 1
+device: cpu
+stride: 32
+confidence_threshold: 0.25
+iou_threshold: 0.45

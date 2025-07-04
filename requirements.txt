@@ -1,0 +1,8 @@
+# yolov5 requirements
+onnxruntime==1.14
+uvicorn
+fastapi
+pymongo
+faiss-gpu
+tritonclient
+geventhttpclient

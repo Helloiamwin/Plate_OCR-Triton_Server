@@ -1,0 +1,34 @@
+name: "pp_pre_text_rec_v2"
+backend: "python"
+max_batch_size: 50
+input [
+  {
+    name: "pre_text_rec_input_images"
+    data_type: TYPE_UINT8
+    dims: [3,-1,-1]
+  },
+  {
+    name: "pre_text_det_input_dt_boxes"
+    data_type: TYPE_FP32
+    dims: [-1,4,2]
+  }
+]
+output [
+  {
+    name: "pre_text_rec_output_images"
+    data_type: TYPE_FP32
+    dims: [3,48,-1]
+  },
+  {
+    name: "pre_text_rec_output_order"
+    data_type: TYPE_UINT8
+    dims: [-1]
+  }
+]
+instance_group [
+    {
+      count: 1
+      kind: KIND_CPU
+    }
+]
+
